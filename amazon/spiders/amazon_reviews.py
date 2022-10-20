@@ -27,6 +27,7 @@ class AmazonReviewsSpider(scrapy.Spider):
         review_elements = response.css("#cm_cr-review_list div.review")
         for review_element in review_elements:
             yield {
+                    "asin": asin,
                     "text": "".join(review_element.css("span[data-hook=review-body] ::text").getall()).strip(),
                     "title": review_element.css("*[data-hook=review-title]>span::text").get(),
                     "location_and_date": review_element.css("span[data-hook=review-date] ::text").get(),
