@@ -12,17 +12,25 @@ class AmazonReviewsSpider(scrapy.Spider):
         asin_list = ['B09G9FPHY6']
         for asin in asin_list:
             amazon_reviews_url = f'https://www.amazon.com/product-reviews/{asin}/'
-            yield scrapy.Request(url=amazon_reviews_url, callback=self.parse_reviews, meta={'asin': asin})
+            yield scrapy.Request(url=amazon_reviews_url, callback=self.parse_reviews, meta={'asin': asin, 'retry_count': 0})
+
 
     def parse_reviews(self, response):
         asin = response.meta['asin']
+        retry_count = response.meta['retry_count']
 
-        ## Get Next Page Url
         next_page_relative_url = response.css(".a-pagination .a-last>a::attr(href)").get()
         if next_page_relative_url is not None:
+            retry_count = 0
             next_page = urljoin('https://www.amazon.com/', next_page_relative_url)
-            yield scrapy.Request(url=next_page, callback=self.parse_reviews, meta={'asin': asin})
-        
+            yield scrapy.Request(url=next_page, callback=self.parse_reviews, meta={'asin': asin, 'retry_count': retry_count})
+
+        ## Adding this retry_count here so we retry any amazon js rendered review pages
+        elif retry_count < 3:
+            retry_count = retry_count+1
+            yield scrapy.Request(url=response.url, callback=self.parse_reviews, dont_filter=True, meta={'asin': asin, 'retry_count': retry_count})
+
+
         ## Parse Product Reviews
         review_elements = response.css("#cm_cr-review_list div.review")
         for review_element in review_elements:
