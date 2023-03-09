@@ -10,12 +10,14 @@ ROBOTSTXT_OBEY = False
 SCRAPEOPS_API_KEY = 'YOUR_API_KEY'
 
 SCRAPEOPS_PROXY_ENABLED = True
+# SCRAPEOPS_PROXY_SETTINGS = {'country': 'us'}
 
 # Add In The ScrapeOps Monitoring Extension
 EXTENSIONS = {
 'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
 }
 
+LOG_LEVEL = 'INFO'
 
 DOWNLOADER_MIDDLEWARES = {
 

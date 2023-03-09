@@ -41,10 +41,11 @@ class AmazonSearchSpider(scrapy.Spider):
         ## Get All Pages
         if page == 1:
             available_pages = response.xpath(
-                '//a[has-class("s-pagination-item")][not(has-class("s-pagination-separator"))]/text()'
+                '//*[contains(@class, "s-pagination-item")][not(has-class("s-pagination-separator"))]/text()'
             ).getall()
 
-            for page_num in available_pages:
+            last_page = available_pages[-1]
+            for page_num in range(2, int(last_page)):
                 amazon_search_url = f'https://www.amazon.com/s?k={keyword}&page={page_num}'
                 yield scrapy.Request(url=amazon_search_url, callback=self.parse_search_results, meta={'keyword': keyword, 'page': page_num})
 
