@@ -5,12 +5,13 @@ SPIDER_MODULES = ['amazon.spiders']
 NEWSPIDER_MODULE = 'amazon.spiders'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
-SCRAPEOPS_API_KEY = 'YOUR_API_KEY'
+SCRAPEOPS_API_KEY = 'd571771a-5f40-4193-ac4b-cc7d1c88abf4'
 
 SCRAPEOPS_PROXY_ENABLED = True
 # SCRAPEOPS_PROXY_SETTINGS = {'country': 'us'}
+DOWNLOAD_DELAY = 11
 
 # Add In The ScrapeOps Monitoring Extension
 EXTENSIONS = {
